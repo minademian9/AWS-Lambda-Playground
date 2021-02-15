@@ -31,7 +31,7 @@ def lambda_handler(event, context):
             
             for ip in rule['IpRanges']:
                 if ip['CidrIp'] == "0.0.0.0/0":
-                    if (rule['FromPort'] not in [80,443]) and (rule['ToPort'] not in [80,443]):
+                    if (rule['FromPort'] not in [80,443]) or (rule['ToPort'] not in [80,443]):
                         failed_sg.append({'Name': sg['GroupName'], 'Id': sg['GroupId']  , "Reason": "All IPs allowed from port " + str(rule['FromPort']) + " to port " + str(rule['ToPort'])  })
                 
             
