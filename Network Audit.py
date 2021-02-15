@@ -11,6 +11,7 @@ def lambda_handler(event, context):
 
 
     failed_sg = []
+    failed_rt = []
     
     print('All Security Groups:')
     print('----------------')
@@ -38,11 +39,25 @@ def lambda_handler(event, context):
 
 
     print(failed_sg)
-
-    # print('All Route Tables:')
-    # print('----------------')
     
-    # rt_all = ec2.describe_route_tables()
-    # for rt in rt_all['RouteTables']:
-    #     print(rt)
+    print('----------------')
+    print('All Route Tables:')
+    print('----------------')
+    
+    
+    
+    rt_all = ec2.describe_route_tables()
+    for rt in rt_all['RouteTables']:
+        igw_flag = False
+        vgw_flag = False
+        for rule in rt['Routes']:
+            if "igw" in rule['GatewayId']:
+                igw_flag = True
+            if "vgw" in rule['GatewayId']:
+                vgw_flag = True
+        if igw_flag and vgw_flag:
+            failed_rt.append(rt['RouteTableId'])
+    
+    print (failed_rt)
+            
 
