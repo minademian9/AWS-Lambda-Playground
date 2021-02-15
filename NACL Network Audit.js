@@ -2,13 +2,12 @@ const aws = require('aws-sdk')
 
 const ec2 = new aws.EC2()
 
-ec2.describeNetworkAcls(params = {}, () => {console.log("I am in")} )
+ec2.describeNetworkAcls(params = {}, ( function(err, data) {
+   if (err) console.log(err, err.stack); // an error occurred
+   else     console.log(data);           // successful response
+ });
 
 
-
-// console.log(ec2.describeNetworkAcls())
-
-console.log("HELOOOOO")
 
 // exports.handler = async (event) => {
 //     // TODO implement
