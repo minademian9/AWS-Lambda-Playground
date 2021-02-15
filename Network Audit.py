@@ -7,10 +7,12 @@ print('Loading function')
 ec2 = boto3.client('ec2')
 
 
-def lambda_handler(event, context):
-    #print("Received event: " + json.dumps(event, indent=2))
 
-    # Get the object from the event and show its content type
+def lambda_handler(event, context):
+
+    all_ip = False #flag to find 0.0.0.0/0 IP addresses
+
+    failed_sg = []
     
     print('All Security Groups:')
     print('----------------')
@@ -18,11 +20,14 @@ def lambda_handler(event, context):
     sg_all = ec2.describe_security_groups()
     for sg in sg_all['SecurityGroups'] :
         # print(sg['GroupName'])
-        print(sg)
+        for rule in sg['IpPermissions']:
+            for ip in rule['IpRanges']:
+                if ip == '0.0.0.0/0':
+                    all_ip=True
+                    break
+            if all_ip:
+                if (rule['FromPort'] not in [80,443]) and (rule['ToPort'] not in [80,443]):
+                    failed_sg.append({'Name': sg['GroupName'], 'id': sg['GroupId']})
 
 
-    # TODO implement
-    # return {
-    #     'statusCode': 200,
-    #     'body': json.dumps('Hello from Lambda!')
-    # }
+print(failed_sg)
