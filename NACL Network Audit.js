@@ -15,8 +15,11 @@ ec2.describeNetworkAcls(params = {}, function(err, data) {
           
            if (rule['RuleAction'] == 'allow' && rule["CidrBlock"] == "0.0.0.0/0")
             if ('PortRange' in rule)
-                        if (! ((rule['PortRange']['From']==80 && rule['PortRange']['To']==80) || (rule['PortRange']['From']==443 && rule['PortRange']['To']==443) || (rule['PortRange']['From']>=1024 && rule['PortRange']['To']>=65535) || (rule['PortRange']['From']>=32768 && rule['PortRange']['To']>=32768))  )
+                       {
+                           if (! ((rule['PortRange']['From']==80 && rule['PortRange']['To']==80) || (rule['PortRange']['From']==443 && rule['PortRange']['To']==443) || (rule['PortRange']['From']>=1024 && rule['PortRange']['To']>=65535) || (rule['PortRange']['From']>=32768 && rule['PortRange']['To']>=32768))  )
                                 console.log(nacl['NetworkAclId'] + " Port Range " + rule['PortRange']['From'].toString() + " - " + rule['PortRange']['To'].toString());
+                       }
+                       else { console.log(nacl['NetworkAclId'] + " Allowing all IPs on all ports " ) }
 
       }
    }
