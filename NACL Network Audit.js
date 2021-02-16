@@ -4,7 +4,20 @@ const ec2 = new aws.EC2()
 
 ec2.describeNetworkAcls(params = {}, function(err, data) {
    if (err) console.log(err, err.stack); // an error occurred
-   else     console.log(data);           // successful response
+   else console.log(data);        //   console.log(data['NetworkAcls'][1]['Entries']);           // successful response
+   
+   for (var nacl in data['NetworkAcls'])
+   {
+      for (var rule in nacl['Entries']) 
+      {
+          console.log(rule);
+           if (rule['RuleAction'] == 'allow' && rule["CidrBlock"] == "0.0.0.0/0")
+                        if (! ((rule['PortRange']['From']==80 && rule['PortRange']['To']==80) || (rule['PortRange']['From']==443 && rule['PortRange']['To']==443) || (rule['PortRange']['From']>=1024 && rule['PortRange']['To']>=65535) || (rule['PortRange']['From']>=32768 && rule['PortRange']['To']>=32768))  )
+                                console.log(rule);
+
+      }
+   }
+   
  });
 
 // for nacl in nacl_df.loc[index,'Entries']:
