@@ -16,17 +16,12 @@ ec2.describeNetworkAcls(params = {}, function(err, data) {
            if (rule['RuleAction'] == 'allow' && rule["CidrBlock"] == "0.0.0.0/0")
             if ('PortRange' in rule)
                         if (! ((rule['PortRange']['From']==80 && rule['PortRange']['To']==80) || (rule['PortRange']['From']==443 && rule['PortRange']['To']==443) || (rule['PortRange']['From']>=1024 && rule['PortRange']['To']>=65535) || (rule['PortRange']['From']>=32768 && rule['PortRange']['To']>=32768))  )
-                                console.log(rule);
+                                console.log(nacl['NetworkAclId'] + " Port Range " + rule['PortRange']['From'].toString() + " - " + rule['PortRange']['To'].toString());
 
       }
    }
    
  });
-
-// for nacl in nacl_df.loc[index,'Entries']:
-//         if nacl['RuleAction'] == 'allow' and nacl["CidrBlock"] == "0.0.0.0/0":
-//             if 'PortRange' in nacl:
-//                         if not ((nacl['PortRange']['From']==80 and nacl['PortRange']['To']==80) or (nacl['PortRange']['From']==443 and nacl['PortRange']['To']==443)or (nacl['PortRange']['From']>=1024 and nacl['PortRange']['To']>=65535) or (nacl['PortRange']['From']>=32768 and nacl['PortRange']['To']>=32768)):
 
 
 // for index,val in nacl_df.iterrows():
